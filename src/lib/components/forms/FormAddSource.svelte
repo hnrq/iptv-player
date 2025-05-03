@@ -45,7 +45,12 @@
 			<Tabs.Trigger value="xtream">Xtream Codes</Tabs.Trigger>
 		</Tabs.List>
 	</Tabs.Root>
-	<TextField {form} disabled={$submitting} name="url" placeholder="http://iptv.com" />
+	<TextField
+		{form}
+		disabled={$submitting}
+		name="url"
+		placeholder="https://iptv-org.github.io/iptv/index.m3u"
+	/>
 	<Form.Field {form} name="authenticated">
 		<Form.Control>
 			{#snippet children({ props })}
