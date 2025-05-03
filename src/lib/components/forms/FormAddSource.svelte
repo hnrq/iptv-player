@@ -1,28 +1,17 @@
 <script lang="ts" module>
-	import { z } from 'zod';
+	import { type } from 'arktype';
 
-	export const schema = z
-		.object({
-			url: z.string().url(),
-			type: z.enum(['xtream', 'm3u']).default('m3u'),
-			authenticated: z.boolean().default(false),
-			username: z.string().optional(),
-			password: z.string().optional()
-		})
-		.superRefine(({ authenticated, username, password }, context) => {
-			if (authenticated && !username)
-				context.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: 'Required',
-					path: ['username']
-				});
-			if (authenticated && !password)
-				context.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: 'Required',
-					path: ['password']
-				});
-		});
+	export const AddSourceSchema = type({
+		url: 'string.url',
+		type: PlaylistType,
+		authenticated: 'boolean'
+	}).and(
+		type({
+			authenticated: 'true',
+			username: 'string',
+			password: 'string'
+		}).or(type({ authenticated: 'false' }))
+	);
 </script>
 
 <script lang="ts">
@@ -32,8 +21,10 @@
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 	import { fly } from 'svelte/transition';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import { PlaylistType } from '$lib/types';
 
-	const { form, action }: { action?: string; form: SuperForm<z.infer<typeof schema>> } = $props();
+	const { form, action }: { action?: string; form: SuperForm<typeof AddSourceSchema.infer> } =
+		$props();
 
 	const { enhance, form: formData, submitting } = form;
 </script>

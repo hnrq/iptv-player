@@ -12,10 +12,7 @@
 	const form = superForm(data.form, {
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
-				localStorage.setItem(
-					encodeURIComponent(result.data?.url),
-					JSON.stringify(result.data?.data)
-				);
+				localStorage.setItem(encodeURIComponent(result.data?.url), JSON.stringify(result.data));
 				$flash = { type: 'success', message: `Added source ${result.data?.url}` };
 				goto(`/watch?url=${encodeURIComponent(result.data?.url)}`);
 			}

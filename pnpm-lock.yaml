@@ -42,6 +42,9 @@ importers:
       '@types/m3u8-parser':
         specifier: ^7.2.1
         version: 7.2.1
+      arktype:
+        specifier: ^2.1.20
+        version: 2.1.20
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.21(postcss@8.5.3)
@@ -117,9 +120,6 @@ importers:
       vite:
         specifier: ^6.2.6
         version: 6.3.4(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1)
-      zod:
-        specifier: ^3.24.3
-        version: 3.24.3
 
 packages:
 
@@ -1958,10 +1958,8 @@ snapshots:
   '@ark/schema@0.46.0':
     dependencies:
       '@ark/util': 0.46.0
-    optional: true
 
-  '@ark/util@0.46.0':
-    optional: true
+  '@ark/util@0.46.0': {}
 
   '@babel/runtime@7.27.1': {}
 
@@ -2491,7 +2489,6 @@ snapshots:
     dependencies:
       '@ark/schema': 0.46.0
       '@ark/util': 0.46.0
-    optional: true
 
   autoprefixer@10.4.21(postcss@8.5.3):
     dependencies:
@@ -3641,4 +3638,5 @@ snapshots:
       zod: 3.24.3
     optional: true
 
-  zod@3.24.3: {}
+  zod@3.24.3:
+    optional: true
