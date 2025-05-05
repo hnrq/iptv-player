@@ -33,7 +33,7 @@
 					}}
 					class="flex h-10 items-center gap-4 hover:cursor-pointer"
 				>
-					<object data={segment.logo} title="" width="50" aria-label="">
+					<object data={segment.logo} title="" width="50">
 						<p class="text-xs font-bold">No Logo</p>
 					</object>
 					<span>{segment.title}</span>

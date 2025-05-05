@@ -1,46 +1,38 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import videojs from 'video.js';
-	import Hls from 'hls.js';
 	import { playlist, selectedChannel, showChannelSelector } from '../../store';
-	import '../VideoJSControls';
+	import './videoJSControls';
 
-	import 'video.js/dist/video-js.css';
 	import './index.css';
+	import type Player from 'video.js/dist/types/player';
+	import { toast } from 'svelte-sonner';
 
 	let video: HTMLVideoElement | undefined = $state();
 	let channelSelectorToggle: HTMLButtonElement | undefined = $state();
-	let hls: Hls | undefined = $state();
+	let player: Player | undefined = $state();
 
 	onMount(async () => {
 		if (!video) return;
-		const player = videojs(video, {
+
+		player = videojs(video, {
 			fill: true,
 			liveui: true,
 			autoplay: true,
-			preloadWebComponents: true,
-			techOrder: ['chromecast', 'html5'],
 			controlBar: {
+				audioTrackButton: false,
 				pictureInPictureToggle: true,
 				subsCapsButton: false
 			}
 		});
 
+		player.on('error', () => {
+			toast.error(player?.error()?.message ?? '');
+			showChannelSelector.set(true);
+		});
+
 		const element = player.getChild('controlBar')?.addChild('ToggleChannelSelector');
 		channelSelectorToggle = element?.el() as HTMLButtonElement;
-
-		if (Hls.isSupported()) {
-			hls = new Hls({ debug: true });
-			hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-				if (!video) return;
-				video.muted = true;
-				video.play();
-			});
-		} else {
-			video.addEventListener('canplay', () => {
-				video?.play();
-			});
-		}
 	});
 
 	$effect(() => {
@@ -48,20 +40,15 @@
 	});
 
 	$effect.pre(() => {
-		if (!video || !$playlist || !hls) return;
-		if (Hls.isSupported()) {
-			hls.loadSource($playlist.segments[$selectedChannel].uri);
-			hls.attachMedia(video);
-		} else video.src = $playlist.segments[$selectedChannel].uri;
+		if (!video || !$playlist) return;
+
+		player?.src({
+			src: $playlist.segments[$selectedChannel].uri,
+			type: 'application/x-mpegURL'
+		});
 	});
 </script>
 
 <video class="video-js" controls bind:this={video}>
 	<track kind="captions" />
 </video>
-
-<style>
-	:global(.vjs-texttrack-settings) {
-		display: none;
-	}
-</style>
