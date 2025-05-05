@@ -1,0 +1,27 @@
+.video-js {
+	@apply font-sans;
+	@apply text-sm;
+}
+
+.video-js .vjs-control-bar {
+	@apply bg-transparent;
+}
+
+.video-js :is(.vjs-play-progress, .vjs-volume-level) {
+	@apply bg-primary;
+}
+
+.video-js
+	:is(
+		.vjs-load-progress,
+		.vjs-play-progress,
+		.vjs-progress-holder,
+		.vjs-volume-bar.vjs-slider-horizontal,
+		.vjs-volume-level
+	) {
+	@apply rounded-lg;
+}
+
+.video-js .vjs-load-progress {
+	@apply bg-secondary;
+}

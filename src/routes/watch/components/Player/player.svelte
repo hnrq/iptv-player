@@ -2,11 +2,11 @@
 	import { onMount } from 'svelte';
 	import videojs from 'video.js';
 	import Hls from 'hls.js';
-	import { playlist, selectedChannel, showChannelSelector } from '../store';
-	import './VideoJSControls';
+	import { playlist, selectedChannel, showChannelSelector } from '../../store';
+	import '../VideoJSControls';
 
 	import 'video.js/dist/video-js.css';
-	import '@videojs/themes/dist/forest/index.css';
+	import './index.css';
 
 	let video: HTMLVideoElement | undefined = $state();
 	let channelSelectorToggle: HTMLButtonElement | undefined = $state();
@@ -16,19 +16,24 @@
 		if (!video) return;
 		const player = videojs(video, {
 			fill: true,
-			controlBar: { liveui: true, subsCapsButton: false }
+			liveui: true,
+			autoplay: true,
+			preloadWebComponents: true,
+			techOrder: ['chromecast', 'html5'],
+			controlBar: {
+				pictureInPictureToggle: true,
+				subsCapsButton: false
+			}
 		});
 
 		const element = player.getChild('controlBar')?.addChild('ToggleChannelSelector');
 		channelSelectorToggle = element?.el() as HTMLButtonElement;
-		channelSelectorToggle.textContent = 'Channels';
 
 		if (Hls.isSupported()) {
 			hls = new Hls({ debug: true });
 			hls.on(Hls.Events.MEDIA_ATTACHED, () => {
 				if (!video) return;
 				video.muted = true;
-				console.log('Playing');
 				video.play();
 			});
 		} else {
@@ -51,7 +56,7 @@
 	});
 </script>
 
-<video class="video-js vjs-theme-city" controls bind:this={video}>
+<video class="video-js" controls bind:this={video}>
 	<track kind="captions" />
 </video>
 

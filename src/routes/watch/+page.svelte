@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Player from './components/Player.svelte';
+	import { Player } from './components/Player';
 	import ChannelSelector from './components/ChannelSelector.svelte';
 
 	import { onMount } from 'svelte';

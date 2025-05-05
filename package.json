@@ -16,7 +16,8 @@
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
-		"@lucide/svelte": "^0.506.0",
+		"@material-symbols/svg-400": "^0.31.2",
+		"@poppanator/sveltekit-svg": "^5.0.1",
 		"@sveltejs/adapter-auto": "^6.0.0",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",

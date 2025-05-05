@@ -33,7 +33,9 @@
 					}}
 					class="flex h-10 items-center gap-4 hover:cursor-pointer"
 				>
-					<img src={segment.logo} title="No IMG" width="50" alt="" />
+					<object data={segment.logo} title="" width="50" aria-label="">
+						<p class="text-xs font-bold">No Logo</p>
+					</object>
 					<span>{segment.title}</span>
 				</Command.Item>
 			{/each}
