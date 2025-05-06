@@ -38,7 +38,7 @@ class CustomErrorDisplay extends videojs.getComponent('ErrorDisplay') {
 	}
 
 	buildCSSClass() {
-		return 'h-screen w-screen flex gap-2 items-center flex-col justify-center max-w-80 m-auto vjs-hidden';
+		return 'h-dvh w-dvh flex gap-2 items-center flex-col justify-center max-w-80 m-auto vjs-hidden';
 	}
 }
 

@@ -12,7 +12,9 @@ declare global {
 				message: string;
 			};
 		}
-		// interface PageState {}
+		interface PageState {
+			modalShown?: 'add-playlist';
+		}
 		// interface Platform {}
 	}
 }
