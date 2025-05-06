@@ -1,17 +1,28 @@
 <script lang="ts" module>
-	import { type } from 'arktype';
+	import { z } from 'zod';
 
-	export const AddSourceSchema = type({
-		url: 'string.url',
-		type: PlaylistType,
-		authenticated: 'boolean'
-	}).and(
-		type({
-			authenticated: 'true',
-			username: 'string',
-			password: 'string'
-		}).or(type({ authenticated: 'false' }))
-	);
+	export const AddSourceSchema = z
+		.object({
+			url: z.string().url(),
+			type: z.enum(['m3u', 'xtream']).default('m3u'),
+			authenticated: z.boolean().default(false),
+			username: z.string().optional(),
+			password: z.string().optional()
+		})
+		.superRefine(({ authenticated, username, password }, ctx) => {
+			if (!username && authenticated)
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Required',
+					path: ['username']
+				});
+			if (!password && authenticated)
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Required',
+					path: ['password']
+				});
+		});
 </script>
 
 <script lang="ts">
@@ -21,21 +32,27 @@
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 	import { fly } from 'svelte/transition';
 	import * as Tabs from '$lib/components/ui/tabs';
-	import { PlaylistType } from '$lib/types';
 
-	const { form, action }: { action?: string; form: SuperForm<typeof AddSourceSchema.infer> } =
+	const { form, action }: { action?: string; form: SuperForm<z.infer<typeof AddSourceSchema>> } =
 		$props();
 
 	const { enhance, form: formData, submitting } = form;
 </script>
 
 <form {action} method="POST" use:enhance class="flex flex-col gap-2">
-	<Tabs.Root disabled={$submitting} bind:value={$formData.type}>
-		<Tabs.List class="grid w-full grid-cols-2">
-			<Tabs.Trigger value="m3u">M3U URL</Tabs.Trigger>
-			<Tabs.Trigger value="xtream">Xtream Codes</Tabs.Trigger>
-		</Tabs.List>
-	</Tabs.Root>
+	<Form.Field {form} name="type">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Tabs.Root disabled={$submitting} {...props} bind:value={$formData.type}>
+					<Tabs.List class="grid w-full grid-cols-2">
+						<Tabs.Trigger value="m3u">M3U URL</Tabs.Trigger>
+						<Tabs.Trigger value="xtream">Xtream Codes</Tabs.Trigger>
+					</Tabs.List>
+				</Tabs.Root>
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
 	<TextField
 		{form}
 		disabled={$submitting}

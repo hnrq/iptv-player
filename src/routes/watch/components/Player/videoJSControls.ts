@@ -32,7 +32,7 @@ class CustomErrorDisplay extends videojs.getComponent('ErrorDisplay') {
 					showChannelSelector.set(true);
 				},
 				class: 'w-full !bg-primary hover:!bg-primary/90 z-10',
-				children: createRawSnippet(() => ({ render: () => 'Change channel' }))
+				children: createRawSnippet(() => ({ render: () => '<span>Change channel</span>' }))
 			}
 		});
 	}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Dialog as DialogPrimitive, type WithoutChildrenOrChild } from 'bits-ui';
-	import X from '@material-symbols/svg-400/sharp/close.svg?component';
+	import X from '@material-symbols/svg-400/rounded/close.svg?component';
 	import type { Snippet } from 'svelte';
 	import * as Dialog from './index.js';
 	import { cn } from '$lib/utils.js';

@@ -3,10 +3,18 @@
 	import ChannelSelector from './components/ChannelSelector.svelte';
 
 	import { onMount } from 'svelte';
-	import { initPlaylistStore, playlist } from './store';
+	import { playlist } from './store';
+	import playlists from '../store';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 
 	onMount(async () => {
-		playlist.set(await initPlaylistStore());
+		if ($playlists[page.url.searchParams.get('url') as string] === undefined) {
+			goto('/');
+			toast.error('Playlist not found');
+		}
+		playlist.set($playlists[page.url.searchParams.get('url') as string]);
 	});
 </script>
 

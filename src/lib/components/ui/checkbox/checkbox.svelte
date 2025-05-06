@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Checkbox as CheckboxPrimitive, type WithoutChildrenOrChild } from 'bits-ui';
-	import Check from '@material-symbols/svg-400/sharp/check.svg?component';
-	import Minus from '@material-symbols/svg-400/sharp/minus.svg?component';
+	import Check from '@material-symbols/svg-400/rounded/check.svg?component';
+	import Minus from '@material-symbols/svg-400/rounded/remove.svg?component';
 	import { cn } from '$lib/utils.js';
 
 	let {

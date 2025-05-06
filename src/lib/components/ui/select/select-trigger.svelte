@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Select as SelectPrimitive, type WithoutChild } from 'bits-ui';
-	import ChevronDown from '@material-symbols/svg-400/sharp/chevron-down.svg?component';
+	import ChevronDown from '@material-symbols/svg-400/rounded/chevron-down.svg?component';
 	import { cn } from '$lib/utils.js';
 
 	let {

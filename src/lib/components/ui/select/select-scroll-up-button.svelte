@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ChevronUp from '@material-symbols/svg-400/sharp/chevron-up.svg?component';
+	import ChevronUp from '@material-symbols/svg-400/rounded/chevron-up.svg?component';
 	import { Select as SelectPrimitive, type WithoutChildrenOrChild } from 'bits-ui';
 	import { cn } from '$lib/utils.js';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Command as CommandPrimitive } from 'bits-ui';
-	import Search from '@material-symbols/svg-400/sharp/search.svg?component';
+	import Search from '@material-symbols/svg-400/rounded/search.svg?component';
 	import { cn } from '$lib/utils.js';
 
 	let {
