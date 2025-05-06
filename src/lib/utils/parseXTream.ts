@@ -16,6 +16,9 @@ const parseXTream = async (
 	const response = await fetch(
 		new URL(`/player_api.php?${queryParams.toString()}`, url).toString()
 	);
+
+	if (!response.ok) throw new Error(`${response.url}: ${response.status} ${await response.text()}`);
+
 	const data: XTreamSegment[] = await response.json();
 	return data.map((segment) => ({
 		id: segment.stream_id.toString(),
