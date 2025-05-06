@@ -1,4 +1,4 @@
-import m3u8Parser from 'm3u8-parser';
+import * as m3u8Parser from 'm3u8-parser';
 import camelCase from 'lodash/camelCase';
 import type { Segment } from '$lib/types';
 
@@ -12,6 +12,7 @@ const parseTVGTags = (tvgString: string) => {
 		{ title }
 	);
 };
+
 const parseM3U = async (
 	url: string,
 	credentials?: { username: string; password: string }

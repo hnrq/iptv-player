@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      m3u8-parser:
-        specifier: ^7.2.0
-        version: 7.2.0
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.5
@@ -72,6 +68,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      m3u8-parser:
+        specifier: ^7.2.0
+        version: 7.2.0
       mode-watcher:
         specifier: ^1.0.4
         version: 1.0.4(svelte@5.28.2)

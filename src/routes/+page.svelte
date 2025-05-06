@@ -10,19 +10,27 @@
 	import type { M3UPlaylist } from '$lib/types';
 	import { Button } from '$lib/components/ui/button';
 	import { toast } from 'svelte-sonner';
+	import parseM3U from '$lib/utils/parseM3U';
+	import parseXTream from '$lib/utils/parseXTream';
 
 	const { data }: { data: PageData } = $props();
 
 	const form = superForm(data.form, {
 		dataType: 'json',
-		onResult: ({ result, cancel }) => {
-			if (result.type === 'success') {
-				playlistsStore.add(result.data as M3UPlaylist);
-				toast.success(`Added source ${result.data?.url}`);
-				goto(`/watch?url=${encodeURIComponent(result.data?.url)}`);
-			} else if (result.type === 'error') {
-				toast.error(result.error.message);
-				cancel();
+		onUpdate: async ({ form }) => {
+			try {
+				const segments = await (form.data.type === 'm3u' ? parseM3U : parseXTream)(
+					form.data.url,
+					form.data.authenticated
+						? { username: form.data.username!, password: form.data.password! }
+						: undefined
+				);
+
+				playlistsStore.add({ ...form.data, segments } as unknown as M3UPlaylist);
+				toast.success(`Added source ${form.data?.url}`);
+				goto(`/watch?url=${encodeURIComponent(form.data?.url)}`);
+			} catch (e) {
+				toast.error((e as Error).message);
 			}
 		}
 	});
