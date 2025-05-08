@@ -25,10 +25,10 @@
 	<Command.List>
 		<Command.Group heading="Channels">
 			<Command.Empty>No results found.</Command.Empty>
-			{#each filteredChannels as segment, index (segment.title)}
+			{#each filteredChannels as segment (segment.title)}
 				<Command.Item
 					onclick={() => {
-						selectedChannel.set(index);
+						selectedChannel.set($playlist?.segments.indexOf(segment) ?? 1);
 						showChannelSelector.set(false);
 					}}
 					class="flex h-10 items-center gap-4 hover:cursor-pointer"
