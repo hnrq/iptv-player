@@ -28,6 +28,7 @@
 
 				playlistsStore.add({ ...form.data, segments } as unknown as M3UPlaylist);
 				toast.success(`Added source ${form.data?.url}`);
+				// eslint-disable-next-line svelte/no-navigation-without-resolve
 				goto(`/watch?url=${encodeURIComponent(form.data?.url)}`);
 			} catch (e) {
 				toast.error((e as Error).message);

@@ -7,6 +7,7 @@
 	import './index.css';
 	import type Player from 'video.js/dist/types/player';
 	import { toast } from 'svelte-sonner';
+	import { buildPlaylistURI } from '$lib/utils/buildPlaylistURI';
 
 	let video: HTMLVideoElement | undefined = $state();
 	let channelSelectorToggle: HTMLButtonElement | undefined = $state();
@@ -41,9 +42,12 @@
 
 	$effect.pre(() => {
 		if (!video || !$playlist) return;
+		const uri = $playlist.segments[$selectedChannel].uri;
+
+		if (!uri) return;
 
 		player?.src({
-			src: $playlist.segments[$selectedChannel].uri,
+			src: buildPlaylistURI(uri),
 			type: 'application/x-mpegURL'
 		});
 	});

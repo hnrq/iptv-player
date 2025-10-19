@@ -7,10 +7,11 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
+	import { resolve } from '$app/paths';
 
 	const initPlaylist = async () => {
 		if ($playlists[page.url.searchParams.get('url') as string] === undefined) {
-			await goto('/');
+			await goto(resolve('/'));
 			toast.error('Playlist not found');
 		}
 		playlist.set($playlists[page.url.searchParams.get('url') as string]);

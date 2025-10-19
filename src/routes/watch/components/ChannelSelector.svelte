@@ -11,7 +11,7 @@
 
 	let searchTerm = $state('');
 	let filteredChannels = $derived(
-		$playlist?.segments.filter((segment) => segment.title.includes(searchTerm))?.slice(0, 10) ?? []
+		$playlist?.segments.filter((segment) => segment.title?.includes(searchTerm))?.slice(0, 10) ?? []
 	);
 </script>
 
