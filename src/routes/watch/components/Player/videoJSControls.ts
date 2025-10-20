@@ -13,7 +13,7 @@ class ToggleChannelSelector extends videojs.getComponent('Button') {
 		super(player);
 		mount(Hamburger, {
 			target: this.el(),
-			props: { width: 24, class: 'fill-white' }
+			props: { width: 24, height: 48, class: 'fill-white' }
 		});
 	}
 
