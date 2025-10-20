@@ -19,6 +19,7 @@
 		player = videojs(video, {
 			fill: true,
 			liveui: true,
+			responsive: true,
 			autoplay: true,
 			controlBar: {
 				audioTrackButton: false,
@@ -26,6 +27,9 @@
 				subsCapsButton: false
 			}
 		});
+
+		// @ts-expect-error: This is injected through videojs-mobile-ui
+		player.mobileUi();
 
 		player.on('error', () => {
 			toast.error(player?.error()?.message ?? '');

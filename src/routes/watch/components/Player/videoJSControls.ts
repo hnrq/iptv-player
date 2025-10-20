@@ -5,12 +5,15 @@ import { createRawSnippet, mount } from 'svelte';
 import type Player from 'video.js/dist/types/player';
 import { Button } from '$lib/components/ui/button';
 
+import 'videojs-mobile-ui/dist/videojs-mobile-ui.css';
+import 'videojs-mobile-ui';
+
 class ToggleChannelSelector extends videojs.getComponent('Button') {
 	constructor(player: Player) {
 		super(player);
 		mount(Hamburger, {
 			target: this.el(),
-			props: { class: 'h-6 fill-white' }
+			props: { width: 24, class: 'fill-white' }
 		});
 	}
 

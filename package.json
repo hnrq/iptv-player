@@ -18,7 +18,7 @@
 		"@eslint/js": "^9.38.0",
 		"@material-symbols/svg-400": "^0.31.9",
 		"@poppanator/sveltekit-svg": "^5.0.1",
-		"@sveltejs/adapter-netlify": "^5.2.4",
+		"@sveltejs/adapter-vercel": "^6.0.0",
 		"@sveltejs/kit": "^2.47.1",
 		"@sveltejs/vite-plugin-svelte": "^5.1.1",
 		"@tailwindcss/typography": "^0.5.19",
@@ -58,5 +58,8 @@
 		"onlyBuiltDependencies": [
 			"esbuild"
 		]
+	},
+	"dependencies": {
+		"videojs-mobile-ui": "^1.1.1"
 	}
 }

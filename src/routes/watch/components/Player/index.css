@@ -11,6 +11,15 @@
 	@apply bg-primary;
 }
 
+@media screen and (max-width: 640px) {
+	.video-js .vjs-seek-to-live-text {
+		@apply p-2;
+	}
+	.video-js .vjs-control-bar .vjs-control.vjs-button {
+		@apply max-w-8;
+	}
+}
+
 .video-js
 	:is(
 		.vjs-load-progress,
