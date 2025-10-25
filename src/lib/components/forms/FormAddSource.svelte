@@ -1,9 +1,9 @@
 <script lang="ts" module>
-	import { z } from 'zod';
+	import * as z from 'zod';
 
 	export const AddSourceSchema = z
 		.object({
-			url: z.string().url(),
+			url: z.url(),
 			type: z.enum(['m3u', 'xtream']).default('m3u'),
 			authenticated: z.boolean().default(false),
 			username: z.string().optional(),
@@ -12,13 +12,13 @@
 		.superRefine(({ authenticated, username, password }, ctx) => {
 			if (!username && authenticated)
 				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
+					code: 'custom',
 					message: 'Required',
 					path: ['username']
 				});
 			if (!password && authenticated)
 				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
+					code: 'custom',
 					message: 'Required',
 					path: ['password']
 				});

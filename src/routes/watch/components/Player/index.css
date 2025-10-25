@@ -1,14 +1,21 @@
+@reference '../../../../app.css';
+
 .video-js {
-	@apply font-sans;
 	@apply text-sm;
+	@apply font-sans;
 }
 
 .video-js .vjs-control-bar {
 	@apply bg-transparent;
+	@apply px-2;
 }
 
 .video-js :is(.vjs-play-progress, .vjs-volume-level) {
 	@apply bg-primary;
+}
+
+.video-js .vjs-control-bar button.vjs-control-button {
+	@apply w-6;
 }
 
 @media screen and (max-width: 640px) {

@@ -25,8 +25,6 @@
 </script>
 
 <Toaster />
-{#await playlists.init()}
-	<div class="vjs-loading-spinner"></div>
-{:then}
+{#await playlists.init() then}
 	{@render children()}
 {/await}

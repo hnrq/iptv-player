@@ -13,7 +13,7 @@ class ToggleChannelSelector extends videojs.getComponent('Button') {
 		super(player);
 		mount(Hamburger, {
 			target: this.el(),
-			props: { width: 24, height: 48, class: 'fill-white' }
+			props: { width: 24, height: 42, class: 'fill-white' }
 		});
 	}
 
@@ -35,7 +35,7 @@ class CustomErrorDisplay extends videojs.getComponent('ErrorDisplay') {
 					showChannelSelector.set(true);
 				},
 				class: 'w-full !bg-primary hover:!bg-primary/90 z-10',
-				children: createRawSnippet(() => ({ render: () => '<span>Change channel</span>' }))
+				children: createRawSnippet(() => ({ render: () => 'Change channel' }))
 			}
 		});
 	}

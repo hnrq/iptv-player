@@ -12,6 +12,7 @@
 	import { toast } from 'svelte-sonner';
 	import parseM3U from '$lib/utils/parseM3U';
 	import parseXTream from '$lib/utils/parseXTream';
+	import { resolve } from '$app/paths';
 
 	const { data }: { data: PageData } = $props();
 
@@ -28,7 +29,7 @@
 
 				playlistsStore.add({ ...form.data, segments } as unknown as M3UPlaylist);
 				toast.success(`Added source ${form.data?.url}`);
-				// eslint-disable-next-line svelte/no-navigation-without-resolve
+
 				goto(`/watch?url=${encodeURIComponent(form.data?.url)}`);
 			} catch (e) {
 				toast.error((e as Error).message);
@@ -39,7 +40,7 @@
 	let playlists = $derived(Object.values($playlistsStore));
 </script>
 
-<main class="w-dvh flex h-dvh flex-col items-center justify-center gap-3">
+<main class="flex flex-col items-center justify-center gap-3">
 	{#if playlists.length > 0}
 		<div class="flex h-full w-full flex-col gap-3 p-4">
 			<div class="flex justify-between">
@@ -49,13 +50,13 @@
 				</Button>
 			</div>
 			<div class="flex flex-col">
-				{#each playlists as playlist (playlist.url)}
+				{#each playlists as { url, segments } (url)}
 					<a
-						href={`/watch?url=${encodeURIComponent(playlist.url)}`}
-						class="flex flex-col gap-2 px-6 py-3 hover:bg-secondary/90"
+						href={resolve('/watch') + '?' + new URLSearchParams({ url }).toString()}
+						class="hover:bg-secondary/90 flex flex-col gap-2 px-6 py-3"
 					>
-						<h3 class="font-bold">{playlist.url}</h3>
-						<small><b>{playlist.segments.length}</b> channels</small>
+						<h3 class="font-bold">{url}</h3>
+						<small><b>{segments.length}</b> channels</small>
 					</a>
 				{/each}
 			</div>
@@ -74,7 +75,7 @@
 			</Dialog.Content>
 		</Dialog.Root>
 	{:else}
-		<div class="max-w-100 w-80">
+		<div class="w-80 max-w-100">
 			<FormAddSource {form} action="?/source" />
 		</div>
 	{/if}

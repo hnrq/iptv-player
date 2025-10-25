@@ -7,7 +7,8 @@
 	import './index.css';
 	import type Player from 'video.js/dist/types/player';
 	import { toast } from 'svelte-sonner';
-	import { buildPlaylistURI } from '$lib/utils/buildPlaylistURI';
+
+	let { playlistUrl }: { playlistUrl: string } = $props();
 
 	let video: HTMLVideoElement | undefined = $state();
 	let channelSelectorToggle: HTMLButtonElement | undefined = $state();
@@ -51,7 +52,7 @@
 		if (!uri) return;
 
 		player?.src({
-			src: buildPlaylistURI(uri),
+			src: playlistUrl.startsWith('http:') ? `/api/proxy?url=${encodeURIComponent(uri)}` : uri,
 			type: 'application/x-mpegURL'
 		});
 	});

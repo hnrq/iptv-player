@@ -10,6 +10,8 @@
 	};
 
 	let searchTerm = $state('');
+	let observer = $state<HTMLDivElement>();
+	let itemCount = $state(10);
 	let filteredChannels = $derived(
 		$playlist?.segments.filter((segment) => segment.title?.includes(searchTerm))?.slice(0, 10) ?? []
 	);
@@ -39,6 +41,7 @@
 					<span>{segment.title}</span>
 				</Command.Item>
 			{/each}
+			<div ref={observer} />
 		</Command.Group>
 	</Command.List>
 </Command.Dialog>

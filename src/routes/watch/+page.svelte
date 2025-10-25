@@ -9,12 +9,14 @@
 	import { toast } from 'svelte-sonner';
 	import { resolve } from '$app/paths';
 
+	const playlistUrl = page.url.searchParams.get('url') as string;
+
 	const initPlaylist = async () => {
-		if ($playlists[page.url.searchParams.get('url') as string] === undefined) {
+		if ($playlists[playlistUrl] === undefined) {
 			await goto(resolve('/'));
 			toast.error('Playlist not found');
 		}
-		playlist.set($playlists[page.url.searchParams.get('url') as string]);
+		playlist.set($playlists[playlistUrl]);
 	};
 </script>
 
@@ -22,7 +24,7 @@
 	<div class="vjs-loading-spinner"></div>
 {:then}
 	<div class="h-dvh">
-		<Player />
+		<Player {playlistUrl} />
 		<ChannelSelector />
 	</div>
 {/await}

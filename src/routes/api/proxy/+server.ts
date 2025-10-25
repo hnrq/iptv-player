@@ -3,6 +3,7 @@ import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ url }) => {
 	const streamUrl = url.searchParams.get('url');
+	console.log('Proxying URL:', streamUrl);
 
 	if (!streamUrl) {
 		return new Response(JSON.stringify({ error: 'Missing "url" query parameter.' }), {
