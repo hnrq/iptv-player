@@ -7,13 +7,14 @@ import { Button } from '$lib/components/ui/button';
 
 import 'videojs-mobile-ui/dist/videojs-mobile-ui.css';
 import 'videojs-mobile-ui';
+import ChannelSelector from '../ChannelSelector.svelte';
 
 class ToggleChannelSelector extends videojs.getComponent('Button') {
 	constructor(player: Player) {
 		super(player);
 		mount(Hamburger, {
 			target: this.el(),
-			props: { width: 24, height: 42, class: 'fill-white' }
+			props: { width: 24, height: 42, class: 'fill-white mx-2 hover:cursor-pointer' }
 		});
 	}
 
@@ -31,13 +32,15 @@ class CustomErrorDisplay extends videojs.getComponent('ErrorDisplay') {
 		mount(Button, {
 			target: this.el(),
 			props: {
-				onclick: function () {
+				onclick: () => {
 					showChannelSelector.set(true);
 				},
-				class: 'w-full !bg-primary hover:!bg-primary/90 z-10',
-				children: createRawSnippet(() => ({ render: () => 'Change channel' }))
+				class: 'z-10',
+				children: createRawSnippet(() => ({ render: () => '<span>Change channel</span>' }))
 			}
 		});
+
+		mount(ChannelSelector, { target: this.el() });
 	}
 
 	buildCSSClass() {

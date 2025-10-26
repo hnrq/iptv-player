@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { playlist, selectedChannel, showChannelSelector } from '../store';
 	import * as Command from '$lib/components/ui/command';
+	import { Spinner } from '$lib/components/ui/spinner';
+	import { onMount } from 'svelte';
+
+	const PAGE_SIZE = 10;
 
 	const handleKeydown = (e: KeyboardEvent) => {
 		if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -9,12 +13,28 @@
 		}
 	};
 
+	const intersectionObserver = new IntersectionObserver((entries) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting)
+				itemCount = Math.min(itemCount + PAGE_SIZE, filteredChannels.length ?? PAGE_SIZE);
+		});
+	});
+
 	let searchTerm = $state('');
-	let observer = $state<HTMLDivElement>();
-	let itemCount = $state(10);
+	let spinner = $state<HTMLDivElement>();
+	let itemCount = $state(PAGE_SIZE);
 	let filteredChannels = $derived(
-		$playlist?.segments.filter((segment) => segment.title?.includes(searchTerm))?.slice(0, 10) ?? []
+		$playlist?.segments.filter((segment) => segment.title?.includes(searchTerm)) ?? []
 	);
+	let displayedChannels = $derived(filteredChannels.slice(0, itemCount));
+
+	$effect(() => {
+		if (spinner) intersectionObserver.observe(spinner);
+	});
+
+	onMount(() => {
+		return () => intersectionObserver.disconnect();
+	});
 </script>
 
 <svelte:document onkeydown={handleKeydown} />
@@ -23,11 +43,17 @@
 	shouldFilter={false}
 	bind:open={() => $showChannelSelector, (value) => showChannelSelector.set(value)}
 >
-	<Command.Input bind:value={searchTerm} placeholder="Search for a channel..." />
+	<Command.Input
+		bind:value={searchTerm}
+		oninput={() => {
+			itemCount = PAGE_SIZE;
+		}}
+		placeholder="Search for a channel..."
+	/>
 	<Command.List>
 		<Command.Group heading="Channels">
 			<Command.Empty>No results found.</Command.Empty>
-			{#each filteredChannels as segment (segment.title)}
+			{#each displayedChannels as segment, index (index)}
 				<Command.Item
 					onclick={() => {
 						selectedChannel.set($playlist?.segments.indexOf(segment) ?? 1);
@@ -41,7 +67,11 @@
 					<span>{segment.title}</span>
 				</Command.Item>
 			{/each}
-			<div ref={observer} />
+			{#if filteredChannels.length > displayedChannels.length}
+				<div bind:this={spinner} class="flex justify-center p-2">
+					<Spinner />
+				</div>
+			{/if}
 		</Command.Group>
 	</Command.List>
 </Command.Dialog>
