@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { Player } from './components/Player';
-	import ChannelSelector from './components/ChannelSelector.svelte';
 
-	import { playlist } from './store';
+	import { playlist, selectedChannel } from './store';
 	import playlists from '../store';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
@@ -11,20 +10,16 @@
 
 	const playlistUrl = page.url.searchParams.get('url') as string;
 
-	const initPlaylist = async () => {
+	const initStore = async () => {
 		if ($playlists[playlistUrl] === undefined) {
 			await goto(resolve('/'));
 			toast.error('Playlist not found');
 		}
 		playlist.set($playlists[playlistUrl]);
+		selectedChannel.set(Number(page.url.searchParams.get('channel') ?? 0));
 	};
 </script>
 
-{#await initPlaylist()}
-	<div class="vjs-loading-spinner"></div>
-{:then}
-	<div class="h-dvh">
-		<Player {playlistUrl} />
-		<ChannelSelector />
-	</div>
-{/await}
+<div class="h-dvh">
+	{#await initStore() then}<Player {playlistUrl} />{/await}
+</div>

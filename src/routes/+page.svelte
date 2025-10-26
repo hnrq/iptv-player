@@ -40,24 +40,27 @@
 	let playlists = $derived(Object.values($playlistsStore));
 </script>
 
-<main class="flex flex-col items-center justify-center gap-3">
+<main class="m-auto flex max-w-200 flex-col items-center justify-center gap-3">
 	{#if playlists.length > 0}
 		<div class="flex h-full w-full flex-col gap-3 p-4">
 			<div class="flex justify-between">
-				<h2 class="text-2xl">Playlists - {playlists.length}</h2>
-				<Button variant="ghost" onclick={() => replaceState('', { modalShown: 'add-playlist' })}>
-					<Add class="fill-primary" />
+				<h2 class="text-xl font-bold">You have {playlists.length} Playlists</h2>
+				<Button onclick={() => replaceState('', { modalShown: 'add-playlist' })}>
+					Add playlist<Add />
 				</Button>
 			</div>
+			<hr />
 			<div class="flex flex-col">
 				{#each playlists as { url, segments } (url)}
-					<a
-						href={resolve('/watch') + '?' + new URLSearchParams({ url }).toString()}
-						class="hover:bg-secondary/90 flex flex-col gap-2 px-6 py-3"
-					>
-						<h3 class="font-bold">{url}</h3>
-						<small><b>{segments.length}</b> channels</small>
-					</a>
+					<div class="flex justify-between">
+						<a
+							href={resolve('/watch') + '?' + new URLSearchParams({ url }).toString()}
+							class="hover:bg-secondary/90 flex flex-col gap-2 px-6 py-3"
+						>
+							<h3 class="font-bold">{url}</h3>
+							<small><b>{segments.length}</b> channels</small>
+						</a>
+					</div>
 				{/each}
 			</div>
 		</div>
