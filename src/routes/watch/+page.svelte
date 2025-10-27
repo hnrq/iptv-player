@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Player } from './components/Player';
 
-	import { playlist, selectedChannel } from './store';
+	import { playlist, selectedChannel, showChannelSelector } from './store';
 	import playlists from '../store';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
@@ -18,7 +18,16 @@
 		playlist.set($playlists[playlistUrl]);
 		selectedChannel.set(Number(page.url.searchParams.get('channel') ?? 0));
 	};
+
+	const handleKeydown = (e: KeyboardEvent) => {
+		if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+			e.preventDefault();
+			showChannelSelector.update((curr) => !curr);
+		}
+	};
 </script>
+
+<svelte:document onkeydown={handleKeydown} />
 
 <div class="h-dvh">
 	{#await initStore() then}<Player {playlistUrl} />{/await}

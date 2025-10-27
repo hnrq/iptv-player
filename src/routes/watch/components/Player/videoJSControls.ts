@@ -25,6 +25,13 @@ class ToggleChannelSelector extends videojs.getComponent('Button') {
 	}
 }
 
+class ChannelSelectorOverlay extends videojs.getComponent('Component') {
+	constructor(player: Player) {
+		super(player);
+		mount(ChannelSelector, { target: this.el() });
+	}
+}
+
 class CustomErrorDisplay extends videojs.getComponent('ErrorDisplay') {
 	constructor(player: Player) {
 		super(player);
@@ -39,8 +46,6 @@ class CustomErrorDisplay extends videojs.getComponent('ErrorDisplay') {
 				children: createRawSnippet(() => ({ render: () => '<span>Change channel</span>' }))
 			}
 		});
-
-		mount(ChannelSelector, { target: this.el() });
 	}
 
 	buildCSSClass() {
@@ -48,5 +53,6 @@ class CustomErrorDisplay extends videojs.getComponent('ErrorDisplay') {
 	}
 }
 
+videojs.registerComponent('ChannelSelectorOverlay', ChannelSelectorOverlay);
 videojs.registerComponent('ErrorDisplay', CustomErrorDisplay);
 videojs.registerComponent('ToggleChannelSelector', ToggleChannelSelector);

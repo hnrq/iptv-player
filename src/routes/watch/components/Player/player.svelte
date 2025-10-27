@@ -11,7 +11,6 @@
 	let { playlistUrl }: { playlistUrl: string } = $props();
 
 	let video: HTMLVideoElement | undefined = $state();
-	let channelSelectorToggle: HTMLButtonElement | undefined = $state();
 	let player: Player | undefined = $state();
 
 	onMount(async () => {
@@ -37,12 +36,8 @@
 			showChannelSelector.set(true);
 		});
 
-		const element = player.getChild('controlBar')?.addChild('ToggleChannelSelector');
-		channelSelectorToggle = element?.el() as HTMLButtonElement;
-	});
-
-	$effect(() => {
-		channelSelectorToggle?.classList.toggle('text-primary', $showChannelSelector);
+		player.getChild('controlBar')?.addChild('ToggleChannelSelector');
+		player.addChild('ChannelSelectorOverlay');
 	});
 
 	$effect.pre(() => {
