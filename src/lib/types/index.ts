@@ -26,5 +26,7 @@ export type Segment = m3u8Parser.Segment & {
 export type M3UPlaylist = {
 	url: string;
 	type: 'm3u';
+	username?: string;
+	password?: string;
 	segments: Segment[];
 };

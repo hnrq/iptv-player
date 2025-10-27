@@ -1,7 +1,7 @@
 <script lang="ts">
 	import FormAddSource from '$lib/components/forms/FormAddSource.svelte';
-	import { superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$types';
+	import { superForm, type FormResult } from 'sveltekit-superforms/client';
+	import type { ActionData, PageData } from './$types';
 	import { goto, replaceState } from '$app/navigation';
 	import Add from '@material-symbols/svg-400/rounded/add.svg?component';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -9,36 +9,57 @@
 	import playlistsStore from './store';
 	import type { M3UPlaylist } from '$lib/types';
 	import { Button } from '$lib/components/ui/button';
-	import { toast } from 'svelte-sonner';
-	import parseM3U from '$lib/utils/parseM3U';
-	import parseXTream from '$lib/utils/parseXTream';
 	import { resolve } from '$app/paths';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 
 	const { data }: { data: PageData } = $props();
 
 	const form = superForm(data.form, {
 		dataType: 'json',
-		onUpdate: async ({ form }) => {
-			try {
-				const segments = await (form.data.type === 'm3u' ? parseM3U : parseXTream)(
-					form.data.url,
-					form.data.authenticated
-						? { username: form.data.username!, password: form.data.password! }
-						: undefined
-				);
-
-				playlistsStore.add({ ...form.data, segments } as unknown as M3UPlaylist);
-				toast.success(`Added source ${form.data?.url}`);
-
-				goto(`/watch?url=${encodeURIComponent(form.data?.url)}`);
-			} catch (e) {
-				toast.error((e as Error).message);
+		onUpdate: async ({ result, form }) => {
+			const action = result.data as FormResult<ActionData>;
+			if (form.valid && action.segments) {
+				playlistsStore.add({ ...form.data, segments: action.segments } as unknown as M3UPlaylist);
+				await goto(`/watch?url=${encodeURIComponent(form.data?.url)}`);
 			}
 		}
 	});
 
 	let playlists = $derived(Object.values($playlistsStore));
 </script>
+
+{#snippet removePlaylistAlertDialog(url: string)}
+	<AlertDialog.Root>
+		<AlertDialog.Trigger><Button variant="ghost">Remove</Button></AlertDialog.Trigger>
+		<AlertDialog.Content>
+			<AlertDialog.Header>
+				<AlertDialog.Title>Remove Playlist</AlertDialog.Title>
+			</AlertDialog.Header>
+			<AlertDialog.Description>
+				Are you sure you want to remove playlist <b>{url}</b>? This action cannot be undone.
+			</AlertDialog.Description>
+			<AlertDialog.Footer>
+				<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+				<AlertDialog.Action onclick={() => playlistsStore.remove(url)}>Remove</AlertDialog.Action>
+			</AlertDialog.Footer>
+		</AlertDialog.Content>
+	</AlertDialog.Root>
+{/snippet}
+
+{#snippet playlistListItem({ url, segments }: M3UPlaylist)}
+	<div
+		class="hover:bg-secondary/90 flex w-full items-center justify-between rounded-sm border transition transition-colors"
+	>
+		<a
+			href={resolve('/watch') + '?' + new URLSearchParams({ url }).toString()}
+			class="flex w-full flex-col gap-2 px-6 py-3"
+		>
+			<h3 class="font-bold">{url}</h3>
+			<small><b>{segments.length}</b> channels</small>
+		</a>
+		{@render removePlaylistAlertDialog(url)}
+	</div>
+{/snippet}
 
 <main class="m-auto flex max-w-200 flex-col items-center justify-center gap-3">
 	{#if playlists.length > 0}
@@ -50,36 +71,29 @@
 				</Button>
 			</div>
 			<hr />
-			<div class="flex flex-col">
-				{#each playlists as { url, segments } (url)}
-					<div class="flex justify-between">
-						<a
-							href={resolve('/watch') + '?' + new URLSearchParams({ url }).toString()}
-							class="hover:bg-secondary/90 flex flex-col gap-2 px-6 py-3"
-						>
-							<h3 class="font-bold">{url}</h3>
-							<small><b>{segments.length}</b> channels</small>
-						</a>
-					</div>
+			<div class="flex flex-col gap-2">
+				{#each playlists as playlist (playlist.url)}
+					{@render playlistListItem(playlist)}
 				{/each}
 			</div>
 		</div>
-		<Dialog.Root
-			open={page.state.modalShown === 'add-playlist'}
-			onOpenChange={(open) => {
-				if (!open) replaceState('', { modalShown: undefined });
-			}}
-		>
-			<Dialog.Content>
-				<Dialog.Header>
-					<Dialog.Title>Add Playlist</Dialog.Title>
-				</Dialog.Header>
-				<FormAddSource {form} action="?/source" />
-			</Dialog.Content>
-		</Dialog.Root>
 	{:else}
-		<div class="w-80 max-w-100">
+		<div class="mx-auto flex h-dvh w-100 items-center justify-center">
 			<FormAddSource {form} action="?/source" />
 		</div>
 	{/if}
 </main>
+
+<Dialog.Root
+	open={page.state.modalShown === 'add-playlist'}
+	onOpenChange={(open) => {
+		if (!open) replaceState('', { modalShown: undefined });
+	}}
+>
+	<Dialog.Content>
+		<Dialog.Header>
+			<Dialog.Title>Add Playlist</Dialog.Title>
+		</Dialog.Header>
+		<FormAddSource {form} action="?/source" />
+	</Dialog.Content>
+</Dialog.Root>

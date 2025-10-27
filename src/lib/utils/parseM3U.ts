@@ -26,7 +26,7 @@ const parseM3U = async (
 
 	return parser.manifest.segments.map((segment) => ({
 		...segment,
-		...parseTVGTags(segment.title)
+		...parseTVGTags(segment.title as string)
 	}));
 };
 

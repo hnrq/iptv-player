@@ -39,7 +39,7 @@
 	const { enhance, form: formData, submitting } = form;
 </script>
 
-<form {action} method="POST" use:enhance class="flex flex-col gap-2">
+<form {action} method="POST" use:enhance class="flex w-full flex-col gap-2">
 	<Form.Field {form} name="type">
 		<Form.Control>
 			{#snippet children({ props })}
@@ -60,12 +60,14 @@
 		placeholder="https://iptv-org.github.io/iptv/index.m3u"
 	/>
 	<Form.Field {form} name="authenticated">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Checkbox disabled={$submitting} {...props} bind:checked={$formData.authenticated} />
-				<Form.Label>Needs Authentication</Form.Label>
-			{/snippet}
-		</Form.Control>
+		<div class="flex flex-row gap-2">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Checkbox disabled={$submitting} {...props} bind:checked={$formData.authenticated} />
+					<Form.Label>Needs Authentication</Form.Label>
+				{/snippet}
+			</Form.Control>
+		</div>
 		<Form.FieldErrors />
 	</Form.Field>
 	{#if $formData.authenticated}

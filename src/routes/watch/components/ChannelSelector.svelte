@@ -40,6 +40,7 @@
 <svelte:document onkeydown={handleKeydown} />
 
 <Command.Dialog
+	portalProps={{ disabled: true }}
 	shouldFilter={false}
 	bind:open={() => $showChannelSelector, (value) => showChannelSelector.set(value)}
 >

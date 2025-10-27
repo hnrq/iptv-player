@@ -2,7 +2,7 @@ import type { Segment, XTreamSegment } from '$lib/types';
 
 type SegmentInfo = Pick<Segment, 'id' | 'logo' | 'title' | 'groupTitle' | 'uri'>;
 
-const parseXTream = async (
+const parseXtream = async (
 	url: string,
 	credentials?: { username: string; password: string }
 ): Promise<Omit<SegmentInfo, 'title'>[]> => {
@@ -32,4 +32,4 @@ const parseXTream = async (
 	}));
 };
 
-export default parseXTream;
+export default parseXtream;
