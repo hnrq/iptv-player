@@ -1,12 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { createRawSnippet, onMount } from 'svelte';
 	import videojs from 'video.js';
 	import { playlist, selectedChannel, showChannelSelector } from '../../store';
+	import Hamburger from '@material-symbols/svg-400/rounded/menu.svg?component';
 	import './videoJSControls';
 
 	import './index.css';
 	import type Player from 'video.js/dist/types/player';
 	import { toast } from 'svelte-sonner';
+	import ChannelSelector from '../ChannelSelector.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	let { playlistUrl }: { playlistUrl: string } = $props();
 
@@ -33,11 +36,27 @@
 
 		player.on('error', () => {
 			toast.error(player?.error()?.message ?? '');
-			showChannelSelector.set(true);
+			player?.getChild('errorDisplay')?.addChild('SvelteComponentWrapper', {
+				component: Button,
+				props: {
+					variant: 'default',
+					onclick: () => showChannelSelector.set(true),
+					children: createRawSnippet(() => ({ render: () => '<span>Change channel</span>' }))
+				}
+			});
 		});
 
-		player.getChild('controlBar')?.addChild('ToggleChannelSelector');
-		player.addChild('ChannelSelectorOverlay');
+		player.getChild('controlBar')?.addChild('SvelteComponentWrapper', {
+			component: Hamburger,
+			props: {
+				width: 24,
+				height: 42,
+				class: 'fill-white mx-2 hover:cursor-pointer',
+				onclick: () => showChannelSelector.set(true)
+			}
+		});
+
+		player.addChild('SvelteComponentWrapper', { component: ChannelSelector });
 	});
 
 	$effect.pre(() => {

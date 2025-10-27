@@ -1,13 +1,11 @@
 @reference '../../../../app.css';
 
 .video-js {
-	@apply text-sm;
-	@apply font-sans;
+	@apply font-sans text-sm;
 }
 
 .video-js .vjs-control-bar {
-	@apply bg-transparent;
-	@apply px-2;
+	@apply bg-transparent px-2;
 }
 
 .video-js :is(.vjs-play-progress, .vjs-volume-level) {
@@ -40,4 +38,12 @@
 
 .video-js .vjs-load-progress {
 	@apply bg-secondary;
+}
+
+.video-js .vjs-error-display {
+	@apply flex items-center justify-center;
+}
+
+.video-js .vjs-error-display .vjs-modal-dialog-content {
+	@apply flex flex-col items-center justify-center gap-2 font-sans text-sm;
 }

@@ -6,6 +6,13 @@
 
 	const PAGE_SIZE = 10;
 
+	const handleKeydown = (e: KeyboardEvent) => {
+		if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+			e.preventDefault();
+			showChannelSelector.update((curr) => !curr);
+		}
+	};
+
 	const intersectionObserver = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting)
@@ -30,10 +37,13 @@
 	});
 </script>
 
+<svelte:document onkeydown={handleKeydown} />
+
 <Command.Dialog
 	shouldFilter={false}
 	portalProps={{ disabled: true }}
-	bind:open={() => $showChannelSelector, (value) => showChannelSelector.set(value)}
+	onOpenChange={(open) => showChannelSelector.set(open)}
+	open={$showChannelSelector}
 >
 	<Command.Input
 		bind:value={searchTerm}
