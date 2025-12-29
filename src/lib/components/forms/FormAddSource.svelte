@@ -32,11 +32,34 @@
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 	import { fly } from 'svelte/transition';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import { onMount } from 'svelte';
 
 	const { form, action }: { action?: string; form: SuperForm<z.infer<typeof AddSourceSchema>> } =
 		$props();
 
 	const { enhance, form: formData, submitting } = form;
+
+	onMount(() => {
+		document.addEventListener('paste', (event) => {
+			if (event.clipboardData) {
+				try {
+					const url = new URL(event.clipboardData.getData('Text'));
+					if (url.pathname.endsWith('.php')) {
+						event.preventDefault();
+						formData.set({
+							type: 'xtream',
+							url: url.origin,
+							authenticated: true,
+							username: url.searchParams.get('username') || '',
+							password: url.searchParams.get('password') || ''
+						});
+					}
+				} catch {
+					// Ignore invalid URLs
+				}
+			}
+		});
+	});
 </script>
 
 <form {action} method="POST" use:enhance class="flex w-full flex-col gap-2">

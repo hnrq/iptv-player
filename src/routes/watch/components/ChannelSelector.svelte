@@ -24,7 +24,9 @@
 	let spinner = $state<HTMLDivElement>();
 	let itemCount = $state(PAGE_SIZE);
 	let filteredChannels = $derived(
-		$playlist?.segments.filter((segment) => segment.title?.includes(searchTerm)) ?? []
+		$playlist?.segments.filter((segment) =>
+			segment.title?.toLowerCase().includes(searchTerm.toLowerCase())
+		) ?? []
 	);
 	let displayedChannels = $derived(filteredChannels.slice(0, itemCount));
 
