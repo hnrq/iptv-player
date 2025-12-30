@@ -9,7 +9,7 @@
 	import type Player from 'video.js/dist/types/player';
 	import { toast } from 'svelte-sonner';
 	import ChannelSelector from '../ChannelSelector.svelte';
-	import { Button } from '$lib/components/ui/button';
+	import { Button, buttonVariants } from '$lib/components/ui/button';
 
 	let { playlistUrl }: { playlistUrl: string } = $props();
 
@@ -39,7 +39,10 @@
 			player?.getChild('errorDisplay')?.addChild('SvelteComponentWrapper', {
 				component: Button,
 				props: {
-					variant: 'default',
+					class: buttonVariants({ variant: 'default' })
+						.split(' ')
+						.map((c) => `${c}!`)
+						.join(' '),
 					onclick: () => showChannelSelector.set(true),
 					children: createRawSnippet(() => ({ render: () => '<span>Change channel</span>' }))
 				}

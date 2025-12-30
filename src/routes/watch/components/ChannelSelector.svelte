@@ -16,19 +16,18 @@
 	const intersectionObserver = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting)
-				itemCount = Math.min(itemCount + PAGE_SIZE, filteredChannels.length ?? PAGE_SIZE);
+				itemCount = Math.min(itemCount + PAGE_SIZE, filteredChannels?.length ?? PAGE_SIZE);
 		});
 	});
 
 	let searchTerm = $state('');
 	let spinner = $state<HTMLDivElement>();
 	let itemCount = $state(PAGE_SIZE);
+
 	let filteredChannels = $derived(
-		$playlist?.segments.filter((segment) =>
-			segment.title?.toLowerCase().includes(searchTerm.toLowerCase())
-		) ?? []
+		searchTerm ? playlist?.search(searchTerm) : ($playlist?.segments ?? [])
 	);
-	let displayedChannels = $derived(filteredChannels.slice(0, itemCount));
+	let displayedChannels = $derived(filteredChannels?.slice(0, itemCount));
 
 	$effect(() => {
 		if (spinner) intersectionObserver.observe(spinner);
@@ -71,7 +70,7 @@
 					<span>{segment.title}</span>
 				</Command.Item>
 			{/each}
-			{#if filteredChannels.length > displayedChannels.length}
+			{#if (filteredChannels?.length ?? 0) > (displayedChannels?.length ?? 0)}
 				<div bind:this={spinner} class="flex justify-center p-2">
 					<Spinner />
 				</div>
