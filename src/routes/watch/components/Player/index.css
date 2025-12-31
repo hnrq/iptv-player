@@ -16,6 +16,18 @@
 	@apply w-6;
 }
 
+.video-js .vjs-big-play-button {
+	@apply scale-200 items-center justify-center rounded-full border-none bg-transparent focus:bg-transparent;
+}
+
+.video-js .vjs-big-play-button > .vjs-icon-placeholder:before {
+	@apply flex items-center justify-center;
+}
+
+.video-js:hover .vjs-big-play-button {
+	@apply bg-transparent;
+}
+
 @media screen and (max-width: 640px) {
 	.video-js .vjs-seek-to-live-text {
 		@apply p-2;

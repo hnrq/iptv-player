@@ -13,12 +13,18 @@
 		}
 	};
 
-	const intersectionObserver = new IntersectionObserver((entries) => {
-		entries.forEach((entry) => {
-			if (entry.isIntersecting)
-				itemCount = Math.min(itemCount + PAGE_SIZE, filteredChannels?.length ?? PAGE_SIZE);
-		});
-	});
+	const intersectionObserver = new IntersectionObserver(
+		(entries) => {
+			const [entry] = entries;
+			if (entry.isIntersecting) {
+				requestAnimationFrame(() => {
+					const total = filteredChannels?.length ?? 0;
+					if (itemCount < total) itemCount = Math.min(itemCount + PAGE_SIZE, total);
+				});
+			}
+		},
+		{ rootMargin: '100px' }
+	);
 
 	let searchTerm = $state('');
 	let spinner = $state<HTMLDivElement>();
@@ -56,7 +62,7 @@
 	<Command.List>
 		<Command.Group heading="Channels">
 			<Command.Empty>No results found.</Command.Empty>
-			{#each displayedChannels as segment, index (index)}
+			{#each displayedChannels as segment (segment.id)}
 				<Command.Item
 					onclick={() => {
 						selectedChannel.set($playlist?.segments.indexOf(segment) ?? 1);
