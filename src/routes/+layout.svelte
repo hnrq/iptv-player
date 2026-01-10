@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import playlists from './store';
 	import { browser } from '$app/environment';
+	import { TermsOfService } from '$lib/components/ui/terms-of-service';
 
 	const flash = getFlash(page);
 	let { children } = $props();
@@ -25,6 +26,7 @@
 </script>
 
 <Toaster />
+<TermsOfService />
 {#await playlists.init() then}
 	{@render children()}
 {/await}
