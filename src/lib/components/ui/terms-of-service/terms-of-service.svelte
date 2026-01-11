@@ -43,29 +43,38 @@
 </script>
 
 <Dialog.Root {open}>
-	<Dialog.Content interactOutsideBehavior="ignore" escapeKeydownBehavior="ignore" showCloseButton={false}>
+	<Dialog.Content
+		class="max-h-screen w-full"
+		interactOutsideBehavior="ignore"
+		escapeKeydownBehavior="ignore"
+		showCloseButton={false}
+	>
 		<Dialog.Header>
 			<Dialog.Title>Terms of Service & Disclaimer</Dialog.Title>
 			<Dialog.Description>Please read and accept before proceeding.</Dialog.Description>
 		</Dialog.Header>
-		<div class="flex flex-col gap-2 py-8">
+		<div class="flex max-h-[50dvh] flex-col gap-2 overflow-y-auto rounded-sm border p-4">
 			{#each sections as { title, description }, i (title)}
-				<h3 class="text-xl font-bold">{title}</h3>
-				<p>{description}</p>
+				<h3 class="font-bold">{title}</h3>
+				<p class="text-sm">{description}</p>
 				{#if i < sections.length - 1}<hr />{/if}
 			{/each}
 		</div>
 		<Dialog.Footer class="flex flex-col gap-8">
 			<div class="flex items-start gap-3">
-                <Checkbox id="terms" bind:checked={agreed} />
-                <div class="grid gap-2">
-                    <Label for="terms">Accept terms and conditions</Label>
-                    <p class="text-muted-foreground text-sm">
-                        By clicking this checkbox, you agree to the terms and conditions.
-                    </p>
-                </div>
-            </div>
-			<Dialog.Close disabled={!agreed} onclick={accept} class={buttonVariants({ variant: 'default' })}>Accept and Continue</Dialog.Close>
+				<Checkbox id="terms" bind:checked={agreed} />
+				<div class="grid gap-1">
+					<Label for="terms">Accept terms and conditions</Label>
+					<p class="text-muted-foreground text-sm">
+						By clicking this checkbox, you agree to the terms and conditions.
+					</p>
+				</div>
+			</div>
+			<Dialog.Close
+				disabled={!agreed}
+				onclick={accept}
+				class={buttonVariants({ variant: 'default' })}>Accept and Continue</Dialog.Close
+			>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>

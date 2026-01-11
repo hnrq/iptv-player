@@ -47,14 +47,12 @@
 {/snippet}
 
 {#snippet playlistListItem({ url, segments }: M3UPlaylist)}
-	<div
-		class="hover:bg-secondary/90 flex w-full items-center justify-between rounded-sm border transition transition-colors"
-	>
+	<div class="hover:bg-secondary/90 flex items-center justify-between rounded-sm border transition">
 		<a
 			href={resolve('/watch') + '?' + new URLSearchParams({ url }).toString()}
-			class="flex w-full flex-col gap-2 px-6 py-3"
+			class="flex max-w-7/10 flex-col gap-2 px-6 py-3"
 		>
-			<h3 class="font-bold">{url}</h3>
+			<h3 class="overflow-hidden font-bold text-ellipsis">{url}</h3>
 			<small><b>{segments.length}</b> channels</small>
 		</a>
 		{@render removePlaylistAlertDialog(url)}
