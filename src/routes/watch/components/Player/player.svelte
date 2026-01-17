@@ -11,6 +11,7 @@
 	import { toast } from 'svelte-sonner';
 	import ChannelSelector from '../ChannelSelector.svelte';
 	import { Button, buttonVariants } from '$lib/components/ui/button';
+	import { TOS_KEY } from '$lib/components/ui/terms-of-service/terms-of-service.svelte';
 
 	let { playlistUrl }: { playlistUrl: string } = $props();
 
@@ -34,6 +35,17 @@
 
 		// @ts-expect-error: This is injected through videojs-mobile-ui
 		player.mobileUi();
+
+		player.on('xhr-hooks-ready', () => {
+			// @ts-expect-error: Vhs is included in videojs by default
+			player.tech({ IWillNotUseThisInPlugins: true }).vhs.xhr.onRequest((options) => {
+				options.beforeSend = (xhr: XMLHttpRequest) => {
+					if (localStorage[TOS_KEY] === 'true')
+						xhr.setRequestHeader('X-Terms-Accepted', localStorage[TOS_KEY]);
+				};
+				return options;
+			});
+		});
 
 		player.on('error', () => {
 			toast.error(player?.error()?.message ?? '');

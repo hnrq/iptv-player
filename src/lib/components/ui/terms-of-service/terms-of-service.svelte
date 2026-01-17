@@ -1,3 +1,22 @@
+<script lang="ts" context="module">
+	export const TOS_KEY = 'tos_accepted';
+
+	const syncTermsWithServiceWorker = async (accepted: boolean) => {
+		if ('serviceWorker' in navigator) {
+			const registration = await navigator.serviceWorker.ready;
+
+			if (registration.active) {
+				const message = {
+					type: 'SET_TERMS',
+					value: accepted
+				};
+
+				registration.active.postMessage(message);
+			}
+		}
+	};
+</script>
+
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as Dialog from '../dialog';
@@ -9,12 +28,14 @@
 	let agreed = $state(false);
 
 	onMount(() => {
-		const hasAccepted = localStorage.getItem('tos_accepted');
+		const hasAccepted = localStorage.getItem(TOS_KEY);
 		if (!hasAccepted) open = true;
+		else syncTermsWithServiceWorker(Boolean(hasAccepted));
 	});
 
-	const accept = () => {
-		localStorage.setItem('tos_accepted', 'true');
+	const accept = async () => {
+		localStorage.setItem(TOS_KEY, 'true');
+		await syncTermsWithServiceWorker(true);
 		open = false;
 	};
 
