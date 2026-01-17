@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createRawSnippet, onMount } from 'svelte';
+	import { PUBLIC_API_HOST } from '$env/static/public';
 	import videojs from 'video.js';
 	import { playlist, selectedChannel, showChannelSelector } from '../../store';
 	import Hamburger from '@material-symbols/svg-400/rounded/menu.svg?component';
@@ -69,7 +70,9 @@
 		if (!uri) return;
 
 		player?.src({
-			src: playlistUrl.startsWith('http:') ? `/api/proxy?url=${encodeURIComponent(uri)}` : uri,
+			src: playlistUrl.startsWith('http:')
+				? `${PUBLIC_API_HOST}?url=${encodeURIComponent(uri)}`
+				: uri,
 			type: 'application/x-mpegURL'
 		});
 	});
