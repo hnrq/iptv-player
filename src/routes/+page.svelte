@@ -76,7 +76,7 @@
 			</div>
 		</div>
 	{:else}
-		<div class="mx-auto flex h-dvh w-100 items-center justify-center">
+		<div class="mx-auto flex h-dvh w-full p-8 max-w-100 items-center justify-center">
 			<FormAddSource {form} action="?/source" />
 		</div>
 	{/if}

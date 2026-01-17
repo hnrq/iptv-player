@@ -62,7 +62,7 @@
 	<Command.List>
 		<Command.Group heading="Channels">
 			<Command.Empty>No results found.</Command.Empty>
-			{#each displayedChannels as segment (segment.id)}
+			{#each displayedChannels as segment, i (`${segment.id}-${i}`)}
 				<Command.Item
 					onclick={() => {
 						selectedChannel.set($playlist?.segments.indexOf(segment) ?? 1);
